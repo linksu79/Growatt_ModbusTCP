@@ -210,7 +210,6 @@ WIT_4000_15000TL3 = {
         # ============================================================================
         # BASE RANGE 0-124: Basic Configuration
         # ============================================================================
-
         0: {'name': 'on_off', 'scale': 1, 'unit': '', 'access': 'RW', 'desc': '0=Off, 1=On'},
         3: {'name': 'active_power_rate', 'scale': 1, 'unit': '%', 'access': 'RW'},
 
@@ -221,7 +220,6 @@ WIT_4000_15000TL3 = {
         # ============================================================================
         # EXTENDED RANGE 125-249: Advanced Grid Control
         # ============================================================================
-
         137: {'name': 'reactive_power_high', 'scale': 1, 'unit': '', 'access': 'RW', 'pair': 138},
         138: {'name': 'reactive_power_low', 'scale': 1, 'unit': '', 'access': 'RW', 'pair': 137, 'combined_scale': 0.1, 'combined_unit': 'var'},
         139: {'name': 'reactive_priority_enable', 'scale': 1, 'unit': '', 'access': 'RW', 'desc': '0=Disable, 1=Enable'},
@@ -246,9 +244,28 @@ WIT_4000_15000TL3 = {
         180: {'name': 'meter_link_set', 'scale': 1, 'unit': '', 'access': 'RW', 'desc': '0=Missed, 1=Received'},
         181: {'name': 'optimizer_count_set', 'scale': 1, 'unit': '', 'access': 'RW', 'valid_range': (0, 64)},
 
-        # PID Control
-        201: {'name': 'pid_working_mode', 'scale': 1, 'unit': '', 'access': 'W', 'desc': '0=Auto, 1=Continuous, 2=All night'},
-        202: {'name': 'pid_on_off', 'scale': 1, 'unit': '', 'access': 'W', 'desc': '0=On, 1=Off'},
+        # --------------------------------------------------------------------
+        # VPP / Remote power control (field tested with WIT + ShineWiLan x2)
+        # Core Modbus: register 202=1 enables remote control, 201 sets percent.
+        # --------------------------------------------------------------------
+        201: {
+            'name': 'vpp_remote_cmd_percent',
+            'scale': 1,
+            'unit': '%',
+            'access': 'RW',
+            'valid_range': (0, 100),
+            'desc': 'Remote power command percent (0-100%)'
+        },
+        202: {
+            'name': 'vpp_remote_enable',
+            'scale': 1,
+            'unit': '',
+            'access': 'RW',
+            'values': {0: 'Disabled', 1: 'Enabled'},
+            'desc': 'Enable remote power control'
+        },
+
+        # Keep as-is (write-only)
         203: {'name': 'pid_voltage_option', 'scale': 1, 'unit': 'V', 'access': 'W', 'valid_range': (300, 1000)},
 
         # Serial Number (209-223, 2 chars per register)
